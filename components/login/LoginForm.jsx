@@ -68,7 +68,7 @@ function LoginForm() {
 
 
   return (
-    <div className="flex justify-center mb-60 items-center">
+    <div className="flex justify-center   h-[calc(100vh-88px)] items-center">
       <div className="mt-10 flex-col justify-center w-[500px] flex md:ml-10">
         <h1 className="text-secendFont my-2 text-center pl-5 lg:text-4xl text-blueColor whitespace-nowrap font-bold tracking-wide text-xl p-2">
           Account Log in
@@ -133,7 +133,6 @@ function LoginForm() {
               type="radio"
               name="favoriteColor"
               value="red"
-              onClick={handleClick}
             />
             <label className="text-blueColor text-sm ml-[300px] font-semibold">
               Forget Password?
@@ -141,7 +140,7 @@ function LoginForm() {
           </div>  
           <button
             type="submit"
-            className="py-3 px-7 w-[450px] text-sm font-medium bg-blueColor text-white hover:shadow-xl hover:shadow-indigo-500/40 transition-all duration-300 hover:scale-105"
+            className="py-3 px-7 w-[450px] text-sm font-medium bg-primary text-white hover:shadow-xl hover:shadow-indigo-500/40 transition-all duration-300 hover:scale-105"
           >
             Log in
           </button>

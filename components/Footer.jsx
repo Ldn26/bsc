@@ -11,9 +11,7 @@ import Image from 'next/image';
 
 function Footer() {
   return (
-    <div className="p-24 pb-10 bg-[url('/illust/Rectangle.svg')] bg-cover  relative  " >
-      <Image   alt='love' className='rounded-full hidden  xl:block absolute right-40 -top-24' src={"/webp/heal.webp"} width={400} height={400} /> 
-<h1 className=' mb:24 lg:mb-64 text-2xl lg:text-[60px] text-white text-center font-semibold  lg:text-left   '>Ready to get started?</h1>
+    <div className="p-24 pb-10  bg-primary   " >
 <div className='flex flex-col lg:flex-row  p-4 gap-4  items-center justify-around ' >
   <div className='flex  items-center justify-center gap-2'>
   <Link href={"./"}  className='flex flex-row  whitespace-nowrap  transition-all hover:scale-105 bg-white rounded-full px-6 py-3 items-center gap-4'>

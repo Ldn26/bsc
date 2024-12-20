@@ -9,10 +9,11 @@ export default {
   theme: {
   	extend: {
   		colors: {
-  			primary: {
-  				DEFAULT: 'hsl(var(--primary))',
-  				foreground: 'hsl(var(--primary-foreground))'
-  			},
+			primary : '#24565C'  , 
+  			// primary: {
+  			// 	DEFAULT: 'hsl(var(--primary))',
+  			// 	foreground: 'hsl(var(--primary-foreground))'
+  			// },
   			secendry: '#DDBF68',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',

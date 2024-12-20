@@ -3,7 +3,6 @@ import LoginForm from "@/components/login/LoginForm";
 import Image from "next/image";
 import KeyFeautures from "@/components/home/KeyFeautures";
 import Howitwork from "@/components/home/Howitwork";
-
 export default function Home() {
   return (
     <>
@@ -14,6 +13,7 @@ export default function Home() {
     <KeyFeautures />
     </div>
     <Howitwork />
+ 
 {/* <LoginForm /> */}
     </>
   );

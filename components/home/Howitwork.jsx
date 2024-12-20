@@ -21,7 +21,7 @@ Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quam fugit nostrum acc
 
 
 </div>
-<div className="flex  lg:flex-row-reverse  justify-center  flex-col    my-24 px-8   gap-4">
+<div className="flex  lg:flex-row  justify-center  flex-col    my-24 px-8   gap-4">
 <div  className="flex flex-col justify-center items-center md:items-start text-center  mx-8      md:text-start  ">
 
 <h1 className={` text-[40px]   font-extrabold  text-center  `}>
