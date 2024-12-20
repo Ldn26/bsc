@@ -39,30 +39,18 @@ function UserForm() {
 
   const onSubmit = async (data) => {
     const obj = {
-
-
-    //   {
-    //     "role" : "idk" ,            
-    //     "type " :  "private" ,
-    //     "nom" :  "youcefldn"  , 
-    //     "email" : "4t4554@gmail.com" ,
-    //     "password" : "ert4"  , 
-    //     "telephone"   : "3534"
-    // }
-      role : "fahmni fiha t3men hadi " , 
+      role : "resident" , 
       nom: data.name,
       email: data.email,
       type :  data.Job , 
       password: data.password,
       telephone: Number(data.number),
-
     };
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/register/", {
+      const response = await fetch("https://smartcity-w5yq.onrender.com/users/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(obj),
       });
@@ -85,7 +73,7 @@ function UserForm() {
       const responseData = await response.json();
     //   setUser(responseData);
       console.log(responseData.jwt);
-      localStorage.setItem("authToken", JSON.stringify(responseData.jwt)); //jwt encoded
+      // localStorage.setItem("authToken", JSON.stringify(responseData.jwt)); //jwt encoded
       Swal.fire({
         title: "Sign-Up Successful",
         icon: "success",
@@ -96,7 +84,7 @@ function UserForm() {
         showConfirmButton: false,
         showCancelButton: true,
       });
-      router.push("/workerDh");
+      router.push("/login");
       console.log("Sign in  in successfully");
     } catch (error) {
       console.error(error);

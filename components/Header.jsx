@@ -51,7 +51,7 @@ const Header = () => {
 <Button 
  className="block w-full rounded bg-primary  px-12 py-3 text-lg font-medium text-white shadow hover:bg-white hover:border-primary border hover:scale-105 hover:text-primary transition-all focus:outline-none  sm:w-auto"
     // className=" text-white p-0 m-0  whitespace-nowrap sm:mr-2 mb-1  w-2  flex justify-center text-xs"
-              content="Sign In"
+              content="Login"
             />
         </a>
    

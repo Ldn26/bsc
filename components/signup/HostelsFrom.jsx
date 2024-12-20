@@ -36,6 +36,7 @@ function HostelForm() {
   const onSubmit = async (data) => {
     const formData = new FormData();
     formData.append("username", data.name);
+    formData.append("role", "hauberge");
     formData.append("email", data.email);
     formData.append("password", data.password);
     formData.append("Numero", Number(data.number));
@@ -44,6 +45,8 @@ function HostelForm() {
     formData.append("offert", data.offert);
     formData.append("hostelPhotos", data.hostelPhotos[0]);
     formData.append("documentations", data.documentations[0]);
+
+
 
     try {
       const response = await fetch("http://127.0.0.1:8000/api/register/", {
