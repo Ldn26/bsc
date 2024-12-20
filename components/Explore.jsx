@@ -1,4 +1,4 @@
-"use client"; // Ensure the component is client-side
+"use client";
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
@@ -11,16 +11,19 @@ const ExplorePage = () => {
     "Touristic complexes": [],
     Transportation: [],
   });
-  const [selectedCard, setSelectedCard] = useState(null); // State to control the selected card for the popup
-  const [isPopupOpen, setIsPopupOpen] = useState(false); // State to control popup visibility
+  const [searchQuery, setSearchQuery] = useState(""); // Search query state
+  const [filteredCards, setFilteredCards] = useState([]); // Cards filtered by search
+  const [selectedCard, setSelectedCard] = useState(null); // State for selected card in popup
+  const [isPopupOpen, setIsPopupOpen] = useState(false); // State for popup visibility
 
   const tabs = ["Auberges", "Touristic places", "Touristic complexes", "Transportation"];
 
   const handleTabClick = (tab) => {
     setSelectedTab(tab);
+    setSearchQuery(""); // Clear search query when changing tabs
   };
 
-  // Fetch data based on the selected tab
+  // Fetch data for the selected tab
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -33,16 +36,31 @@ const ExplorePage = () => {
           const result = await response.json();
           setData((prevData) => ({ ...prevData, "Touristic places": result }));
         }
-        // Add other tabs if needed
       } catch (error) {
-        console.error("Error fetching data: ", error);
+        console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, [selectedTab]); // Re-fetch data when the tab changes
+  }, [selectedTab]); // Refetch data when the tab changes
 
-  const cards = data[selectedTab] || [];
+  // Filter cards based on the search query
+  useEffect(() => {
+    const cards = data[selectedTab] || [];
+    if (searchQuery.trim() === "") {
+      setFilteredCards(cards); // No filter if the search query is empty
+    } else {
+      const lowerCaseQuery = searchQuery.toLowerCase();
+      const filtered = cards.filter(
+        (card) =>
+          (card.title && card.title.toLowerCase().includes(lowerCaseQuery)) ||
+          (card.titre && card.titre.toLowerCase().includes(lowerCaseQuery)) ||
+          (card.description && card.description.toLowerCase().includes(lowerCaseQuery)) ||
+          (card.descr && card.descr.toLowerCase().includes(lowerCaseQuery))
+      );
+      setFilteredCards(filtered);
+    }
+  }, [searchQuery, data, selectedTab]);
 
   const handleCardClick = (card) => {
     setSelectedCard(card); // Set the selected card
@@ -51,13 +69,24 @@ const ExplorePage = () => {
 
   const closePopup = () => {
     setIsPopupOpen(false); // Close the popup
-    setSelectedCard(null); // Clear selected card data
+    setSelectedCard(null); // Clear selected card
   };
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <main className="mt-8 max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold mb-6">Start Exploring</h2>
+
+        {/* Search Bar */}
+        <div className="mb-6">
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+          />
+        </div>
 
         {/* Tabs */}
         <div className="flex justify-center mb-8 space-x-4">
@@ -78,11 +107,11 @@ const ExplorePage = () => {
 
         {/* Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          {cards.length > 0 ? (
-            cards.map((card) => (
+          {filteredCards.length > 0 ? (
+            filteredCards.map((card) => (
               <div
                 key={card.id}
-                onClick={() => handleCardClick(card)} // Trigger popup on card click
+                onClick={() => handleCardClick(card)}
                 className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer"
               >
                 <div className="p-4">
@@ -116,7 +145,7 @@ const ExplorePage = () => {
             ))
           ) : (
             <p className="text-center text-gray-500 col-span-full">
-              No items available for this category.
+              No items match your search.
             </p>
           )}
         </div>
@@ -125,57 +154,41 @@ const ExplorePage = () => {
       {/* Popup */}
       {isPopupOpen && selectedCard && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-8 rounded-lg w-full h-[90%] relative" style={{ maxWidth: "100%", maxHeight: "90vh" }}>
-            {/* Close button */}
-            <button 
-              onClick={closePopup} 
+          <div
+            className="bg-white p-8 rounded-lg  h-[90%] w-[50%] relative"
+            style={{ maxWidth: "80%", maxHeight: "90vh" }}
+          >
+            <button
+              onClick={closePopup}
               className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
             >
               X
             </button>
-            <h1 className="font-bold text-3xl text-black-400 pt-0">{selectedTab}</h1>
+            <h1 className="font-bold text-3xl text-black-400 pt-0 pb-10">{selectedTab}</h1>
             <div className="flex space-x-6">
-              {/* Left side (Image) */}
-              <img 
-                src={selectedCard.imageUrl || "boumerdes13.png"} 
-                alt="Example Image" 
-                className="w-[40%] h-64 object-cover rounded-md"
+              <img
+                src={selectedCard.imageUrl || "boumerdes13.png"}
+                alt="Example Image"
+                className="w-[40%] h-64 object-cover rounded-md mr-10"
               />
-              {/* Right side (Text content) */}
-              <div className="flex-1">
-                <h3 className="font-bold text-teal-700 text-2xl mb-4">{selectedCard.title || selectedCard.titre}</h3>
+              <div className="flex-1 ml-30">
+                <h3 className="font-bold text-teal-700 text-2xl mb-4">
+                  {selectedCard.title || selectedCard.titre}
+                </h3>
                 <p className="text-gray-600 text-sm mb-4">{selectedCard.description || selectedCard.descr}</p>
-                <p className="text-gold-500 text-lg font-semibold mb-6">Price: {selectedCard.price || "N/A"} Da</p>
-                <button className="bg-teal-700 text-white py-2 px-6 rounded-lg w-auto hover:bg-teal-800">
-  Reserve
-</button>
-               
-{selectedTab === "Auberges" && (
-  <div className="flex space-x-4 mt-40 ml">
-    <img
-      src="boumerdes13.png"
-      alt=""
-      className="w-1/3 h-64 object-cover rounded-md"
-    />
-    <img
-      src="boumerdes13.png"
-      alt="Image 2"
-      className="w-1/3 h-64 object-cover rounded-md"
-    />
-    <img
-      src="boumerdes13.png"
-      alt="Image 3"
-      className="w-1/3 h-64 object-cover rounded-md"
-    />
-  </div>
-)}
+                <p className="text-gold-500 text-lg font-semibold mb-6">
+                  Price: {selectedCard.price || "N/A"} Da
+                </p>
 
+                {selectedTab === "Auberges" && (
+                  <button className="bg-secendry text-white py-2 px-6 rounded-lg w-auto">
+                    Reserve
+                  </button>
+                )}
               </div>
             </div>
-
           </div>
         </div>
-        
       )}
     </div>
   );
