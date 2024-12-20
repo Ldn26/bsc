@@ -58,92 +58,23 @@ function LoginForm() {
   };
 
 
-
-  const onSubmitUser2 = async (data) => {
-    const obj = {
-      login: data.email,
-      password: data.password,
-      role : 'resident'
-    };
-    console.log(obj);
-    try {
-      const response = await fetch("https://smartcity-w5yq.onrender.com/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(obj),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error(errorData.message);
-        Swal.fire({
-          title: "Username or password does not exist",
-          icon: "error",
-          toast: true,
-          timer: 4000,
-          position: "top-right",
-          timerProgressBar: false,
-          showConfirmButton: false,
-          showCancelButton: true,
-        });
-        return;
-      }
-
-      const responseData = await response.json();
-      console.log(responseData);
-      console.log(jwtDecode(responseData.jwt));
-
-      localStorage.setItem("authToken", JSON.stringify(responseData.jwt)); // jwt encoded
-      Swal.fire({
-        title: "Login Successful",
-        icon: "success",
-        toast: true,
-        timer: 4000,
-        position: "top-right",
-        timerProgressBar: false,
-        showConfirmButton: false,
-        showCancelButton: true,
-      });
-    
-        router.push("/clientDash");
-      console.log("Logged in successfully");
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const onSubmiHostel = async (data) => {
     const obj = {
       login: data.email,
       password: data.password,
-      role : "hauberge" ,            
-
+      role: 'hauberge',
     };
-
-  
-
     console.log(obj);
-
     try {
-      const response = await fetch("https://smartcity-w5yq.onrender.com/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(obj),
-      });
+      const response = await axiosInstance.post('/users/login', obj);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error(errorData.message);
+      if (!response.data) {
         Swal.fire({
-          title: "Username or password does not exist",
-          icon: "error",
+          title: 'Username or password does not exist',
+          icon: 'error',
           toast: true,
           timer: 4000,
-          position: "top-right",
+          position: 'top-right',
           timerProgressBar: false,
           showConfirmButton: false,
           showCancelButton: true,
@@ -151,25 +82,22 @@ function LoginForm() {
         return;
       }
 
-      const responseData = await response.json();
-      console.log("Response")
-      console.log(responseData.accessToken);
-      // console.log(jwtDecode(responseData.jwt));
-
-      localStorage.setItem("authToken", JSON.stringify(responseData.accessToken)); // jwt encoded
+      const responseData = response.data;
+      console.log(responseData);
+      localStorage.setItem('authToken', JSON.stringify(responseData.jwt)); // jwt encoded
       Swal.fire({
-        title: "Login Successful",
-        icon: "success",
+        title: 'Login Successful',
+        icon: 'success',
         toast: true,
         timer: 4000,
-        position: "top-right",
+        position: 'top-right',
         timerProgressBar: false,
         showConfirmButton: false,
         showCancelButton: true,
       });
-    
-        router.push("/explore");
-      console.log("Logged in successfully");
+
+      router.push('/clientDash');
+      console.log('Logged in successfully');
     } catch (error) {
       console.error(error);
     }

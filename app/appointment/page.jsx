@@ -1,7 +1,8 @@
 import Appointment from '@/components/Appointment'
+import withAuth from '../hoc/withAuth';
 import React from 'react'
 
-function page() {
+const AppointmentPage  = function () {
   return (
     <div>
       <Appointment/>
@@ -9,4 +10,4 @@ function page() {
   )
 }
 
-export default page
+export default AppointmentPage

@@ -10,12 +10,10 @@ const Header = () => {
   return (
     <div className="h-[88px] bg-primary">
       <div className="container mx-auto py-5 flex items-center justify-between px-9 md:py-5">
-  
         <Image  src={"file.svg"} alt="logo" width={40} height={30}/>
-
         {/* Desktop Navigation */}
         <ul className="md:items-center lg:flex hidden">
-          {["Home", "Services","About", "Contact"].map(
+          {["Home","About us", "Contact"].map(
             (menuItem, index) => (
               <li
                 key={index}

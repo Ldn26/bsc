@@ -67,7 +67,7 @@ function Skils() {
   return (
 
 
-    <div className="grid px-16 grid-cols-1  p-24 gap-12 lg:grid-cols-3 lg:gap-16">
+    <div className="grid px-16 grid-cols-1  bg-primary p-24 gap-12 lg:grid-cols-3 lg:gap-16">
 
 <motion.article
    ref={ref}
