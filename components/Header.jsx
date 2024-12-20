@@ -8,7 +8,7 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="h-[88px]">
+    <div className="h-[88px] bg-primary">
       <div className="container mx-auto py-5 flex items-center justify-between px-9 md:py-5">
   
         <Image  src={"file.svg"} alt="logo" width={40} height={30}/>
@@ -19,7 +19,7 @@ const Header = () => {
             (menuItem, index) => (
               <li
                 key={index}
-                className="mx-4 whitespace-nowrap font-medium hover:border-b-2 border-primary flex-none"
+                className="mx-4 whitespace-nowrap font-medium hover:border-b-2 border-secendery text-white flex-none"
               >
                 <Link
                   href={`/${menuItem.toLowerCase().replace(" ", "")}`}
@@ -33,7 +33,7 @@ const Header = () => {
         </ul>
 
         {/* Desktop Buttons */}
-        <div className="hidden flex-row gap-4  border  lg:flex lg:items-center">
+        <div className="hidden flex-row gap-4   lg:flex lg:items-center">
         <a
           href="/signup"
         >
