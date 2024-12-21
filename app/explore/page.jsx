@@ -5,7 +5,9 @@ import { useRouter } from 'next/navigation';
 const page = () => {
   const router = useRouter();
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('authToken');
+    console.log("token")
+    console.log(token)
     if (!token) {
       router.replace('/login'); // Redirect to login if token is missing
     } 

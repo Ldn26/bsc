@@ -37,8 +37,9 @@ function LoginForm() {
       }
 
       const responseData = response.data;
+      console.log("responseData");
       console.log(responseData);
-      localStorage.setItem('authToken', JSON.stringify(responseData.jwt)); // jwt encoded
+      localStorage.setItem('authToken', JSON.stringify(responseData.accessToken)); // jwt encoded
       Swal.fire({
         title: 'Login Successful',
         icon: 'success',
@@ -50,7 +51,7 @@ function LoginForm() {
         showCancelButton: true,
       });
 
-      router.push('/clientDash');
+      router.push('/explore');
       console.log('Logged in successfully');
     } catch (error) {
       console.error(error);
@@ -84,7 +85,7 @@ function LoginForm() {
 
       const responseData = response.data;
       console.log(responseData);
-      localStorage.setItem('authToken', JSON.stringify(responseData.jwt)); // jwt encoded
+      localStorage.setItem('authToken', JSON.stringify(responseData.accessToken)); // jwt encoded
       Swal.fire({
         title: 'Login Successful',
         icon: 'success',
@@ -96,7 +97,7 @@ function LoginForm() {
         showCancelButton: true,
       });
 
-      router.push('/clientDash');
+      router.push('/haubegdash');
       console.log('Logged in successfully');
     } catch (error) {
       console.error(error);

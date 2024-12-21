@@ -1,10 +1,60 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
+import React, { useState, useEffect, useRef } from "react";
+import Image from "next/image";
+import axios from "axios";
+import Message from "@/components/Message";
 
 const ExplorePage = () => {
+  //
+  console.log("AuthToken from local storage");
+  console.log(localStorage.getItem("authToken"));
+  const [textInput, setTextInput] = useState("");
+  const [messages, setMessages] = useState([
+    { id: "1", sender: "user", message: "hello" },
+    { id: "2", sender: "ai", message: "Hey there!" },
+  ]);
+  const [loading, setLoading] = useState(false); // Loading state for AI response
+  const scrollContainerRef = useRef(null); // Reference to the scrollable container
+
+  const handleSendMessage = async () => {
+    if (textInput.trim() === "") return; // Prevent sending empty messages
+
+    // Add user's message
+    setMessages((prev) => [
+      ...prev,
+      { id: `${prev.length + 1}`, sender: "user", message: textInput },
+    ]);
+
+    setTextInput(""); // Clear the input field
+
+    // Show loading indicator for AI response
+    setLoading(true);
+
+    try {
+      // Make API request to get AI response
+      const response = await axios.post("https://smartcity-w5yq.onrender.com/resident/plan", {
+        message: textInput,
+      });
+
+      // Add AI's response to messages
+      setMessages((prev) => [
+        ...prev,
+        { id: `${prev.length + 1}`, sender: "ai", message: response.data.message },
+      ]);
+    } catch (error) {
+      console.error("Error fetching AI response:", error);
+      setMessages((prev) => [
+        ...prev,
+        { id: `${prev.length + 1}`, sender: "ai", message: "Error fetching AI response." },
+      ]);
+    } finally {
+      setLoading(false); // Remove loading indicator
+    }
+  };
+
   const [selectedTab, setSelectedTab] = useState("Auberges");
+  const [openchat, setopenchat] = useState(false);
   const [data, setData] = useState({
     Auberges: [],
     "Touristic places": [],
@@ -15,6 +65,20 @@ const ExplorePage = () => {
   const [filteredCards, setFilteredCards] = useState([]); // Cards filtered by search
   const [selectedCard, setSelectedCard] = useState(null); // State for selected card in popup
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State for popup visibility
+
+  useEffect(() => {
+    // Scroll to the bottom of the container whenever messages or loading changes
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
+    }
+  }, [messages, loading]); // Trigger scroll when messages or loading changes
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); // Prevent default behavior (line break)
+      handleSendMessage(); // Call the send message function
+    }
+  };
 
   const tabs = ["Auberges", "Touristic places", "Touristic complexes", "Transportation"];
 
@@ -61,7 +125,6 @@ const ExplorePage = () => {
       setFilteredCards(filtered);
     }
   }, [searchQuery, data, selectedTab]);
-
   const handleCardClick = (card) => {
     setSelectedCard(card); // Set the selected card
     setIsPopupOpen(true); // Open the popup
@@ -73,7 +136,7 @@ const ExplorePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="min-h-screen relative bg-gray-100 p-6">
       <main className="mt-8 max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold mb-6">Start Exploring</h2>
 
@@ -155,7 +218,7 @@ const ExplorePage = () => {
       {isPopupOpen && selectedCard && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div
-            className="bg-white p-8 rounded-lg  h-[90%] w-[50%] relative"
+            className="bg-white p-8 rounded-lg h-[90%] w-[50%] relative"
             style={{ maxWidth: "80%", maxHeight: "90vh" }}
           >
             <button
@@ -186,6 +249,61 @@ const ExplorePage = () => {
                   </button>
                 )}
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <button onClick={() => setopenchat(true)} className="fixed bottom-4 right-4 bg-teal-700 text-white p-4 rounded-full shadow-lg">
+        <Image src="/chat.svg" alt="chat" width={50} height={50} />
+      </button>
+      {openchat && (
+        <div
+          style={{ scrollBehavior: "smooth" }}
+          ref={scrollContainerRef} // Attach the ref to the scrollable container
+          className="bb fixed bottom-4 bg-white right-0 z-40 w-[500px] rounded-2xl h-[500px] overflow-y-scroll flex flex-col"
+        >
+          <div className="relative w-full">
+            <button onClick={() => { setopenchat(false) }} className="fixed text-2xl rounded-full font-bold right-4 text-white p-4 z-40 ">X </button>
+            <h1 className="border p-4 bg-[#057876] text-white fixed w-full rounded-lg text-2xl font-bold">AI planner </h1>
+          </div>
+          {messages.map((msg, index) => (
+            <Message
+              key={index}
+              user_id={msg.id}
+              reciver={msg.sender === "ai"}
+              sender={msg.sender}
+              message={msg.message}
+            />
+          ))}
+
+          {loading && (
+            <Message
+              user_id="loading"
+              reciver={true}
+              sender="ai"
+              message="Typing..."
+            />
+          )}
+
+          <div className="sticky bottom-4 px-2 mt-24">
+            <div className="bg-gray-400 flex flex-row items-center rounded-xl py-4 w-full justify-between">
+              <input
+                placeholder="Chat with AI!"
+                value={textInput}
+                onKeyDown={handleKeyDown}
+                onChange={(e) => setTextInput(e.target.value)}
+                className={`w-11/12 text-white placeholder:text-white placeholder:text-xl text-xl bg-gray-400 pl-2 focus:outline-none`}
+              />
+              <button className="w-1/12" onClick={handleSendMessage}>
+                <Image
+                  src={"./arrow.svg"}
+                  alt="arrow"
+                  width={20}
+                  height={20}
+                  className="hover:w-6 transition-all duration-300"
+                />
+              </button>
             </div>
           </div>
         </div>
