@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import axiosInstance from "@/app/utils/axiosInstence";
+import axios from "axios";
 // import jwtDecode from "jwt-decode";
 import Swal from "sweetalert2";
 function LoginForm() {
@@ -12,6 +12,53 @@ function LoginForm() {
 
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [show, setShow] = useState(false);
+  // const onSubmitUser = async (data) => {
+  //   const obj = {
+  //     login: data.email,
+  //     password: data.password,
+  //     role: 'resident',
+  //   };
+  //   console.log(obj);
+  //   try {
+  //     const response = await axios.post('https://smartcity-w5yq.onrender.com/users/login', obj);
+
+  //     if (!response.data) {
+  //       Swal.fire({
+  //         title: 'Username or password does not exist',
+  //         icon: 'error',
+  //         toast: true,
+  //         timer: 4000,
+  //         position: 'top-right',
+  //         timerProgressBar: false,
+  //         showConfirmButton: false,
+  //         showCancelButton: true,
+  //       });
+  //       return;
+  //     }
+
+  //     const responseData = response.data;
+  //     console.log("responseData");
+  //     console.log(responseData);
+  //     localStorage.setItem('authToken', JSON.stringify(responseData.accessToken)); // jwt encoded
+  //     Swal.fire({
+  //       title: 'Login Successful',
+  //       icon: 'success',
+  //       toast: true,
+  //       timer: 4000,
+  //       position: 'top-right',
+  //       timerProgressBar: false,
+  //       showConfirmButton: false,
+  //       showCancelButton: true,
+  //     });
+
+  //     router.push('/explore');
+  //     console.log('Logged in successfully');
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+
   const onSubmitUser = async (data) => {
     const obj = {
       login: data.email,
@@ -20,9 +67,15 @@ function LoginForm() {
     };
     console.log(obj);
     try {
-      const response = await axiosInstance.post('/users/login', obj);
-
-      if (!response.data) {
+      const response = await fetch('https://smartcity-w5yq.onrender.com/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(obj),
+      });
+  
+      if (!response.ok) {
         Swal.fire({
           title: 'Username or password does not exist',
           icon: 'error',
@@ -35,8 +88,8 @@ function LoginForm() {
         });
         return;
       }
-
-      const responseData = response.data;
+  
+      const responseData = await response.json();
       console.log("responseData");
       console.log(responseData);
       localStorage.setItem('authToken', JSON.stringify(responseData.accessToken)); // jwt encoded
@@ -50,14 +103,13 @@ function LoginForm() {
         showConfirmButton: false,
         showCancelButton: true,
       });
-
+  
       router.push('/explore');
       console.log('Logged in successfully');
     } catch (error) {
       console.error(error);
     }
   };
-
 
   const onSubmiHostel = async (data) => {
     const obj = {
@@ -67,7 +119,7 @@ function LoginForm() {
     };
     console.log(obj);
     try {
-      const response = await axiosInstance.post('/users/login', obj);
+      const response = await axios.post('https://smartcity-w5yq.onrender.com/users/login', obj);
 
       if (!response.data) {
         Swal.fire({

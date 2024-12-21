@@ -49,7 +49,7 @@ function HostelForm() {
 
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/register/", {
+      const response = await fetch("https://smartcity-w5yq.onrender.com/users/register", {
         method: "POST",
         body: formData,
       });

@@ -35,14 +35,12 @@
       setValue("Job", value);
     };
     const password = watch("password");
-
-
     const onSubmit = async (data) => {
       const obj = {
         role : "resident" , 
         nom: data.name,
         email: data.email,
-        // type :  data.Job , 
+      
         type : 'resident',
         password: data.password,
         telephone: Number(data.number),
@@ -84,9 +82,7 @@
         }
 
         const responseData = await response.json();
-      //   setUser(responseData);
-        console.log(responseData.jwt);
-        // localStorage.setItem("authToken", JSON.stringify(responseData.jwt)); //jwt encoded
+  
         Swal.fire({
           title: "Sign-Up Successful",
           icon: "success",

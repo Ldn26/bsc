@@ -33,14 +33,14 @@ const ExplorePage = () => {
 
     try {
       // Make API request to get AI response
-      const response = await axios.post("https://smartcity-w5yq.onrender.com/resident/plan", {
+      const respons = await axios.post("https://smartcity-w5yq.onrender.com/resident/plan", {
         message: textInput,
       });
 
       // Add AI's response to messages
       setMessages((prev) => [
         ...prev,
-        { id: `${prev.length + 1}`, sender: "ai", message: response.data.message },
+        { id: `${prev.length + 1}`, sender: "ai", message: respons.data.message },
       ]);
     } catch (error) {
       console.error("Error fetching AI response:", error);
